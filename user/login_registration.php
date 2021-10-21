@@ -1,6 +1,38 @@
+<?php  
+require_once "db_con.php";
+
+// Insert
+if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
+
+    $fileName=$_FILES["image"]["name"];
+    $tempName=$_FILES["image"]["tmp_name"];
+    $uploadFileName=time()."_".$fileName;
+    $fileDirectory="upload/".$uploadFileName;
+
+    move_uploaded_file($tempName,$fileDirectory);  
+
+    $name = $_POST['name'];
+    $email = $_REQUEST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $gender = $_POST['gender'];
+    $password = $_POST['password'];
+    //$hobbies = $_POST['hobbies'];
+
+    $query = "INSERT INTO students SET  name ='".$name."', 
+                                        email = '".$email."', 
+                                        phone = '".$phone."',  
+                                        address = '".$address."',
+                                        image='".$uploadFileName."',
+                                        gender='".$gender."',
+                                        password =md5('".$password."')";
+    $conn->query($query);
+    $id = mysqli_insert_id($con);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -65,7 +97,7 @@
                                         <strong>Registration</strong>
                                     </legend>
                                     <!-- Registration Form Start -->
-                                    <form method="post" enctype="multipart/form-data">
+                                    <form action="login_registration.php" method="post" enctype="multipart/form-data">
                                         <!-- Name Input Start -->
                                         <div class="form-group">
                                             <label for="name">Name</label>
@@ -81,7 +113,7 @@
                                         <!-- Phone Input Start -->
                                         <div class="form-group">
                                             <label for="phone">Phone No</label>
-                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phoneNo">
+                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phone">
                                         </div>
                                         <!-- Phone Input End -->
                                         <!-- Address Input Start -->
@@ -91,47 +123,13 @@
                                         </div>
                                         <!-- Address Input End -->
                                         <!-- Gender Input Start -->
-                                        <div class="form-group">
-                                            <label for="gender">Gender</label>
-                                            <select id="gender" class="form-control">
-                                                <option selected disabled value="">Select Gender</option>
-                                                <option value="1">Male</option>
-                                                <option value="2">Female</option>
-                                            </select>
-                                        </div>
+                                        <?php  include "gender_show.php";?>
                                         <!-- Gender Input End -->
                                         <!-- Which Year Input Start -->
-                                        <div>
-                                            <p></p>
-                                            <label for="whichYear">Which Year</label>
-                                            <div class="form-check form-check-inline ml-3" id="whichYear">
-                                                <input class="form-check-input" type="radio" name="wh_year" id="first" value="1">
-                                                <label class="form-check-label" for="first">1st Year</label>
-                                            </div>
-
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="wh_year" id="second" value="2">
-                                                <label class="form-check-label" for="second">2nd Year</label>
-                                            </div>
-
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="wh_year" id="third" value="2">
-                                                <label class="form-check-label" for="third">3rd Year</label>
-                                            </div>
-                                        </div>
+                                        <?php include_once "whichYear_show.php";?>
                                         <!-- Which Year Input end -->
                                         <!-- Subject Input Start -->
-                                        <div class="form-group">
-                                            <label for="subject">Subject</label>
-                                            <select multiple class="form-control" id="subject" name="subject">
-                                                <option>PHP</option>
-                                                <option>NumPy</option>
-                                                <option>Anaconda</option>
-                                                <option>NoteJs</option>
-                                                <option>Java</option>
-                                                <option>C++</option>
-                                            </select>
-                                        </div>
+                                        <?php include_once "subject_show.php";?>
                                         <!-- Subject Input End -->
                                         <!-- Stream/Honours Input Start -->
                                         <div class="form-group">
@@ -155,38 +153,11 @@
                                         </div>
                                         <!-- Stream/Honours Input End -->
                                         <!-- Hobbies Input Start -->
-                                        <div class="form-group">
-                                            <label for="hobbyHading" class="mt-2">Hobbies</label>
-                                            <div class="form-check" id="hobbyHading">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="hobbies[]" value="1">Football
-                                                </label>
-                                            </div>
-                                            <div class=" form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="hobbies[]" value="2">Cricket
-                                                </label>
-                                            </div>
-                                            <div class=" form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="hobbies[]" value="3">Story Book
-                                                </label>
-                                            </div>
-                                            <div class=" form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="hobbies[]" value="4">Swimming
-                                                </label>
-                                            </div>
-                                            <div class=" form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" name="hobbies[]" value="5">Badminton
-                                                </label>
-                                            </div>
-                                        </div>
+                                        <?php include_once "hobby_show.php";?>
                                         <!-- Hobbies Input End -->
                                         <!-- Image Upload Start -->
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile">
+                                            <input type="file" class="custom-file-input" id="customFile" name="image">
                                             <label class="custom-file-label" for="customFile">Upload Image</label>
                                         </div>
                                         <!-- Image Upload End -->
@@ -204,7 +175,7 @@
                                         <!-- Conform Password Input End -->
                                         <!-- Submit Button Start -->
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <input type="submit" name="submit"class="btn btn-primary" value="Submit">
                                         </div>
                                         <!-- Submit Button End -->
                                     </form>

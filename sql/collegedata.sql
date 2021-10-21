@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3308
--- Generation Time: Oct 07, 2021 at 06:39 AM
--- Server version: 8.0.18
--- PHP Version: 7.3.12
+-- Host: 127.0.0.1
+-- Generation Time: Oct 07, 2021 at 12:50 PM
+-- Server version: 10.4.19-MariaDB
+-- PHP Version: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -28,13 +27,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `genders`
 --
 
-DROP TABLE IF EXISTS `genders`;
-CREATE TABLE IF NOT EXISTS `genders` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `genders` (
+  `id` int(20) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `status` enum('Y','N','','') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` enum('Y','N','','') NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -42,13 +39,19 @@ CREATE TABLE IF NOT EXISTS `genders` (
 -- Table structure for table `hobbies`
 --
 
-DROP TABLE IF EXISTS `hobbies`;
-CREATE TABLE IF NOT EXISTS `hobbies` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `hobbies` (
+  `id` int(20) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `status` enum('Y','N') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` enum('Y','N') NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hobbies`
+--
+
+INSERT INTO `hobbies` (`id`, `name`, `status`) VALUES
+(1, 'Cricket', 'Y'),
+(2, 'Football', 'Y');
 
 -- --------------------------------------------------------
 
@@ -56,14 +59,12 @@ CREATE TABLE IF NOT EXISTS `hobbies` (
 -- Table structure for table `streams`
 --
 
-DROP TABLE IF EXISTS `streams`;
-CREATE TABLE IF NOT EXISTS `streams` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `streams` (
+  `id` int(20) NOT NULL,
   `name` varchar(50) NOT NULL,
   `parent_id` int(20) NOT NULL,
-  `status` enum('Y','N','','') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` enum('Y','N','','') NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -71,22 +72,29 @@ CREATE TABLE IF NOT EXISTS `streams` (
 -- Table structure for table `students`
 --
 
-DROP TABLE IF EXISTS `students`;
-CREATE TABLE IF NOT EXISTS `students` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `students` (
+  `id` int(20) NOT NULL,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone` bigint(20) NOT NULL,
   `address` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `image` varchar(50) NOT NULL,
-  `gender_id` int(20) NOT NULL,
-  `year_id` int(20) NOT NULL,
-  `status` enum('Y','N','','') NOT NULL,
-  `created_at` timestamp(6) NOT NULL,
-  `updated_at` timestamp(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `image` varchar(50) DEFAULT NULL,
+  `gender_id` int(20) DEFAULT NULL,
+  `year_id` int(20) NOT NULL DEFAULT 0,
+  `status` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `created_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `name`, `email`, `phone`, `address`, `password`, `image`, `gender_id`, `year_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'cxzcxzc', 'dip@yopmail.coxcxzcm', 0, 'cdxvxzv', '12345678', NULL, NULL, 0, 'Y', '2021-10-07 10:35:37', '2021-10-07 10:35:37'),
+(2, 'xzczcx', 'dip@yopmail.com', 5656567, 'ccxvx', '12345678', NULL, NULL, 0, 'Y', '2021-10-07 10:36:23', '2021-10-07 10:36:23'),
+(3, 'xzczcx', 'dip@yopmail.com', 5656567, 'ccxvx', '12345678', NULL, NULL, 0, 'Y', '2021-10-07 10:44:11', '2021-10-07 10:44:11');
 
 -- --------------------------------------------------------
 
@@ -94,13 +102,11 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Table structure for table `student_hobby`
 --
 
-DROP TABLE IF EXISTS `student_hobby`;
-CREATE TABLE IF NOT EXISTS `student_hobby` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `student_hobby` (
+  `id` int(20) NOT NULL,
   `student_id` int(20) NOT NULL,
-  `hobby_id` int(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `hobby_id` int(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,13 +114,11 @@ CREATE TABLE IF NOT EXISTS `student_hobby` (
 -- Table structure for table `student_subject`
 --
 
-DROP TABLE IF EXISTS `student_subject`;
-CREATE TABLE IF NOT EXISTS `student_subject` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `student_subject` (
+  `id` int(20) NOT NULL,
   `student_id` int(20) NOT NULL,
-  `subject_id` int(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `subject_id` int(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -122,13 +126,11 @@ CREATE TABLE IF NOT EXISTS `student_subject` (
 -- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `subjects`;
-CREATE TABLE IF NOT EXISTS `subjects` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `subjects` (
+  `id` int(20) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `status` enum('Y','N','','') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` enum('Y','N','','') NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -136,13 +138,115 @@ CREATE TABLE IF NOT EXISTS `subjects` (
 -- Table structure for table `years`
 --
 
-DROP TABLE IF EXISTS `years`;
-CREATE TABLE IF NOT EXISTS `years` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `years` (
+  `id` int(20) NOT NULL,
   `name` int(50) NOT NULL,
-  `status` enum('Y','N','','') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `status` enum('Y','N') NOT NULL DEFAULT 'Y'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `genders`
+--
+ALTER TABLE `genders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hobbies`
+--
+ALTER TABLE `hobbies`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `streams`
+--
+ALTER TABLE `streams`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `student_hobby`
+--
+ALTER TABLE `student_hobby`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `student_subject`
+--
+ALTER TABLE `student_subject`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `years`
+--
+ALTER TABLE `years`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `genders`
+--
+ALTER TABLE `genders`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `hobbies`
+--
+ALTER TABLE `hobbies`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `streams`
+--
+ALTER TABLE `streams`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `student_hobby`
+--
+ALTER TABLE `student_hobby`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `student_subject`
+--
+ALTER TABLE `student_subject`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `years`
+--
+ALTER TABLE `years`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
