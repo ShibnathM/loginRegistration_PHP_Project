@@ -17,17 +17,30 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     $address = $_POST['address'];
     $gender = $_POST['gender'];
     $password = $_POST['password'];
-    //$hobbies = $_POST['hobbies'];
+    $hobbies = $_POST['hobbies'];
 
     $query = "INSERT INTO students SET  name ='".$name."', 
                                         email = '".$email."', 
                                         phone = '".$phone."',  
                                         address = '".$address."',
                                         image='".$uploadFileName."',
-                                        gender='".$gender."',
-                                        password =md5('".$password."')";
+                                        gender_id=".$gender.",
+                                        password ='".md5($password)."'";
+
+    //echo $query; die();
     $conn->query($query);
-    $id = mysqli_insert_id($con);
+    $id = $conn->insert_id;
+   
+    if( count($hobbies) > 0 ) {
+        foreach ($hobbies as $key => $hobby) {
+            
+            $sql = "INSERT INTO student_hobby SET student_id =".$id." , 
+                                                  hobby_id =".$hobby."";
+
+           $conn->query($sql);
+        }
+    }
+
 }
 ?>
 

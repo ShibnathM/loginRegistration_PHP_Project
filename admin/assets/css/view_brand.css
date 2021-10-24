@@ -1,0 +1,25 @@
+#img {
+      width: 150px;
+}
+
+#txt {
+      font-size: 16px;
+      color: darkgray;
+}
+
+#preview img {
+      padding: 3px;
+}
+
+.page-link,
+.dataTables_info {
+      display: none;
+}
+
+img {
+      width: 130px;
+}
+
+#addBtn {
+      color: aliceblue;
+}

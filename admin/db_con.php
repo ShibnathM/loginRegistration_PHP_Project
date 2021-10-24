@@ -1,30 +1,13 @@
 <?php
-      Class Connection{
-            
-            private $server = "mysql:host=localhost; dbname=collegedata";
+$serverName = "localhost";
+$username = "root";
+$password = "";
+$dbName="collegedata";
 
-            private $user = "root";
+$conn = new mysqli ($serverName, $username, $password, $dbName);
 
-            private $password = "";
-
-            private $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,);
-
-            protected $con;
-
-            public function openConnection(){
-                  try{
-                        $this->con = new PDO($this->server, $this->user, $this->password, $this->options);
-                        return $this->con;
-                  }
-
-                  catch(PDOException $msg){
-                        echo $msg->getMessage();
-                  }
-            }
-            public function CloseConnection(){
-                  $this->con=null;
-            }
-
-      }
-
+if ($conn -> connect_errno) {
+  echo "Failed to connect to MySQL: " . $conn -> connect_error;
+  exit();
+}
 ?>
