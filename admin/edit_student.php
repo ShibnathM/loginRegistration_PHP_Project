@@ -1,13 +1,20 @@
 <?php  
 require_once "db_con.php";
 
-// Insert
+      $id=$_REQUEST['id'];
+
+//Show Data
+      $studentShow="SELECT * FROM students WHERE id='".$id."'";
+      $studentQuery=$conn->query($studentShow);
+      $row=mysqli_fetch_array($studentQuery);
+
+// Update
 if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
 
     $fileName=$_FILES["image"]["name"];
     $tempName=$_FILES["image"]["tmp_name"];
     $uploadFileName=time()."_".$fileName;
-    $fileDirectory="upload/".$uploadFileName;
+    $fileDirectory="../user/upload".$uploadFileName;
 
     move_uploaded_file($tempName,$fileDirectory);
 
@@ -21,35 +28,36 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     $subject = $_POST['subject'];
     $year = $_POST['wh_year'];
 
-    $query = "INSERT INTO students SET  name ='".$name."', 
-                                        email = '".$email."', 
-                                        phone = '".$phone."',  
-                                        address = '".$address."',
-                                        image='".$uploadFileName."',
-                                        gender_id=".$gender.",
-                                        year_id='".$year."',
-                                        password ='".md5($password)."'";
+    $query = "UPDATE students SET   name ='".$name."', 
+                                    email = '".$email."', 
+                                    phone = '".$phone."',  
+                                    address = '".$address."',
+                                    image='".$uploadFileName."',
+                                    gender_id=".$gender.",
+                                    year_id='".$year."',
+                                    password ='".md5($password)."' 
+                                    WHERE id=$id";
 
     //echo $query; die();
     $conn->query($query);
     $id = $conn->insert_id;
-//insert hobbies   
+//update hobbies   
     if(count($hobbies) > 0 ) {
         foreach ($hobbies as $key => $hobby) {
             
-            $sql = "INSERT INTO student_hobby SET student_id =".$id." , 
+            $sql = "UPDATE student_hobby SET student_id =".$id." , 
                                                   hobby_id =".$hobby."";
 
            $conn->query($sql);
         }
     }
 
-//insert subject
-            $sql="INSERT INTO student_subject SET student_id='".$id."',
+//update subject
+            $sql="UPDATE student_subject SET student_id='".$id."',
                                                   subject_id='".$subject."'";
 
             $conn->query($sql);
-    
+
 }
 ?>
 
@@ -76,72 +84,42 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                 <div class="card">
                     <!-- Card Header Start -->
                     <div class="card-header">
-                        <div class="row">
-                            <div class="col text-center">
-                                <div class="btn-group btn-group-lg">
-                                    <button type="button" class="btn btn-primary" id="loginBtn" onclick="login()">Login</button>
-                                    <button type=" button" class="btn btn-primary" id="regBtn" onclick="register()">Registation</button>
-                                </div>
-                            </div>
-                        </div>
+                        <hr>
                     </div>
                     <!-- Card Header End -->
                     <!-- Card Body Start -->
                     <div class="card-body">
                         <div class="row mx-2 d-flex justify-content-center">
-                            <div class="col-8" id="login">
-                                <!-- Fieldset Start -->
-                                <fieldset class="form-group border p-2">
-                                    <legend>
-                                        <strong>Login</strong>
-                                    </legend>
-                                    <!-- Login Form Start -->
-                                    <form method="post">
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" placeholder="Password" name="password">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Login</button>
-                                    </form>
-                                    <!-- Login Form End -->
-                                </fieldset>
-                                <!-- Fieldset End -->
-                            </div>
-
                             <div class="col-10" id="register">
                                 <!-- Fieldset Start -->
                                 <fieldset class="form-group border p-2">
                                     <legend>
-                                        <strong>Registration</strong>
+                                        <strong>EDIT</strong>
                                     </legend>
                                     <!-- Registration Form Start -->
                                     <form action="login_registration.php" method="post" enctype="multipart/form-data">
                                         <!-- Name Input Start -->
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+                                            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<?php echo $row['name']?>">
                                         </div>
                                         <!-- Name Input End -->
                                         <!-- Email Input Start -->
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+                                            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email" value="<?php echo $row['email']?>">
                                         </div>
                                         <!-- Email Input End -->
                                         <!-- Phone Input Start -->
                                         <div class="form-group">
                                             <label for="phone">Phone No</label>
-                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phone">
+                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phone" value="<?php echo $row['phone']?>">
                                         </div>
                                         <!-- Phone Input End -->
                                         <!-- Address Input Start -->
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                                            <textarea class="form-control" id="address" name="address" rows="3"><?php echo $row['address']?></textarea>
                                         </div>
                                         <!-- Address Input End -->
                                         <!-- Gender Input Start -->
@@ -192,7 +170,7 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                     <!-- Card Body End -->
                     <!-- Card Footer Start -->
                     <div class="card-footer text-muted text-center">
-                        <p>Student Online Login And Registation</p>
+                        <p>Student Data Edit</p>
                     </div>
                     <!-- Card Footer End -->
                 </div>
@@ -209,27 +187,6 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
-    </script>
-    <script>
-        var logForm = document.getElementById("login");
-        var regForm = document.getElementById("register");
-
-        regForm.style.display = "none";
-        document.getElementById("loginBtn").disabled = true;
-
-        function login() {
-            regForm.style.display = "none";
-            logForm.style.display = "inline";
-            document.getElementById("loginBtn").disabled = true;
-            document.getElementById("regBtn").disabled = false;
-        }
-
-        function register() {
-            logForm.style.display = "none";
-            regForm.style.display = "inline";
-            document.getElementById("regBtn").disabled = true;
-            document.getElementById("loginBtn").disabled = false;
-        }
     </script>
 </body>
 

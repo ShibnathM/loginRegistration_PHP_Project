@@ -1,10 +1,7 @@
  <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="dashboard.html" class="brand-link">
-          <span class="brand-text font-weight-light d-flex justify-content-center">Admin</span>
-        </a>
-
+        <h3 class="brand-text font-weight-light d-flex justify-content-center text-primary mt-1"> <strong>Admin</strong></h3>
         <!-- Sidebar -->
         <div class="sidebar">
 
@@ -28,10 +25,50 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="add_gender" class="nav-link">
+                <a href="add_gender.php" class="nav-link">
                   <i class="nav-icon far fa-image"></i>
                   <p>
                     Manage Gender
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="add_hobby.php" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                    Manage Hobby
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="add_year.php" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                    Manage Year
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="add_subject.php" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                    Manage Subject
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="add_degree.php" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                    Manage Degrees
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="add_stream.php" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                     Manage Stream/Honours
                   </p>
                 </a>
               </li>

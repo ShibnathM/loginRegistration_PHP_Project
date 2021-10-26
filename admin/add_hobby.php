@@ -5,14 +5,14 @@
 
   $slNo=0;
 
-  $showGender="SELECT * FROM genders WHERE status='Y'";
-  $showQuery=$conn->query($showGender);
+  $showHobby="SELECT * FROM hobbies WHERE status='Y'";
+  $showQuery=$conn->query($showHobby);
 
   if(isset($_POST['submit'])){
-    $gender=$_REQUEST['gender'];
+    $hobby=$_REQUEST['hobby'];
 
-    $query = "INSERT INTO genders SET  name ='".$gender."', status ='Y'";
-    $conn->query($query);
+    $queryHobby = "INSERT INTO hobbies SET  name ='".$hobby."', status ='Y'";
+    $conn->query($queryHobby);
   }
 ?>
   <!-- Content Wrapper. Contains page content -->
@@ -22,12 +22,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Manage Gender<span id="txt"> Control panel</span> </h1>
+            <h1>Manage Hobby<span id="txt"> Control panel</span> </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-              <li class="breadcrumb-item">Manage Gender</li>
+              <li class="breadcrumb-item">Manage Hobby</li>
             </ol>
           </div>
         </div>
@@ -50,8 +50,8 @@
               <form role="form" method="post">
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="gender">Add Gender</label>
-                      <input type="text" class="form-control" name="gender" id="gender" placeholder="Enter Gender">
+                      <label for="hobby">Add Hobby</label>
+                      <input type="text" class="form-control" name="hobby" id="hobby" placeholder="Enter Hobby">
                       <!-- <div class="msg" id="product_alert"></div> -->
                     </div>
                     <div class="form-group">
@@ -65,7 +65,7 @@
                   <thead>
                   <tr>
                       <th>Sl No</th>
-                      <th>Gender</th>
+                      <th>Hobby</th>
                       <th>Status</th>
                       <th>Delete</th>
                       <!-- <th>ACTIONS</th> -->
@@ -80,7 +80,7 @@
                       <td><?php echo $row['name']?> </td>
                       <td>Status</td>
                       <td>
-                        <a href="delete_gender.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
+                        <a href="delete_hobby.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
                           <i class="fa fa-times d-flex justify-content-center pr-1 text-danger" aria-hidden="true"></i>
                         </a>
                       </td>

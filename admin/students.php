@@ -5,11 +5,9 @@
 
       $slNo=0;
 
-      $student="SELECT * FROM  students";
-      $studentQuery=$conn->query($student);
+      $studentData="SELECT * FROM students";
+      $studentQuery=$conn->query($studentData);
 ?>
-
-
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -52,52 +50,60 @@
                   </div>
                 </div>
               </div>
-              <table id="example1" class="table table-striped table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th>Sl No</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Email Id</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
-                    <th>Gender</th>
-                    <th>Which Year</th>
-                    <th>Subject</th>
-                    <th>Stream/Honours</th>
-                    <th>Hobbies</th>
-                    <th>ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php while($row=mysqli_fetch_array($studentQuery)){
-                ?>
-                  <tr>
-                    <td><?php echo ++$slNo?> </td>
-                    <td><img src="assets/upload_images/>" alt="student_img" style="width: 6rem; height: 6rem;"></td>
-                    <td><?php echo $row['name']?></td>
-                    <td><?php echo $row['email']?></td>
-                    <td><?php echo $row['phone']?></td>
-                    <td><?php echo $row['address']?></td>
-                    <td><?php echo $row['gender_id']?></td>
-                    <td>
-                      <a href="" class="edit" title="Edit" data-toggle="tooltip"><i
-                          class="far fa-edit"></i></a>
-                      <a href="" class="delete" title="Delete" data-toggle="tooltip"><i
-                          class="far fa-trash-alt"></i></a>
-                    </td>
-                  </tr>
-                  <?php
-                  }
+              <div class="row">
+              <div class="col" style="overflow-x:auto">
+                <table id="table" class="table table-striped table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sl No</th>
+                      <th>Image</th>
+                      <th>Name</th>
+                      <th>Email Id</th>
+                      <th>Phone Number</th>
+                      <th>Address</th>
+                      <th>Gender</th>
+                      <th>Which Year</th>
+                      <th>Subject</th>
+                      <th>Stream/Honours</th>
+                      <th>Hobbies</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php while($row=mysqli_fetch_array($studentQuery)){
                   ?>
-                </tbody>
-                <tfoot>
-                <th>
-                  Student Data
-                </th>
-                      
-                </tfoot>
-              </table>
+                    <tr>
+                      <td><?php echo ++$slNo?> </td>
+                      <td>
+                      <img src="../user/upload/<?php echo $row['image']?>" alt="student_img" style="width: 6rem; height: 6rem;">
+                      <td><?php echo $row['name']?></td>
+                      <td><?php echo $row['email']?></td>
+                      <td><?php echo $row['phone']?></td>
+                      <td><?php echo $row['address']?></td>
+                      <td><?php echo $row['gender_id']?></td>
+                      <td><?php echo $row['year_id']?></td>
+                      <td><?php echo 'subject'?></td>
+                      <td><?php echo 'Stream/Honours'?></td>
+                      <td><?php echo 'Hobbies'?></td>
+                      <td>
+                        <a href="edit_student.php?id=<?php echo $row['id']?>" class="edit" title="Edit" data-toggle="tooltip"><i
+                            class="far fa-edit"></i></a>
+                        <a href="delete_student.php?id=<?php echo $row['id']?>" class="delete" title="Delete" data-toggle="tooltip"><i
+                            class="far fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                    <?php
+                    }
+                    ?>
+                  </tbody>
+                  <tfoot>
+                  <th colspan="12" class="text-center">
+                    <strong>Student Data</strong>
+                  </th>
+                  </tfoot>
+                </table>
+              </div>
+              </div>
             </div>
           </div>
         </div>

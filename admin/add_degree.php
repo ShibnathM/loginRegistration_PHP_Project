@@ -5,14 +5,14 @@
 
   $slNo=0;
 
-  $showGender="SELECT * FROM genders WHERE status='Y'";
-  $showQuery=$conn->query($showGender);
+  $selectDegree="SELECT * FROM degrees WHERE status='Y'";
+  $queyDegree=$conn->query($selectDegree);
 
   if(isset($_POST['submit'])){
-    $gender=$_REQUEST['gender'];
+        $degree=$_REQUEST['degree'];
 
-    $query = "INSERT INTO genders SET  name ='".$gender."', status ='Y'";
-    $conn->query($query);
+        $insertDegree="INSERT INTO degrees SET name='".$degree."', status='Y'";
+        $degreeQuery=$conn->query($insertDegree);
   }
 ?>
   <!-- Content Wrapper. Contains page content -->
@@ -22,12 +22,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Manage Gender<span id="txt"> Control panel</span> </h1>
+            <h1>Manage Degrees<span id="txt"> Control panel</span> </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-              <li class="breadcrumb-item">Manage Gender</li>
+              <li class="breadcrumb-item">Manage Degrees</li>
             </ol>
           </div>
         </div>
@@ -50,8 +50,8 @@
               <form role="form" method="post">
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="gender">Add Gender</label>
-                      <input type="text" class="form-control" name="gender" id="gender" placeholder="Enter Gender">
+                      <label for="product">Add Degrees</label>
+                      <input type="text" class="form-control" name="degree" id="degree" placeholder="Enter Degree">
                       <!-- <div class="msg" id="product_alert"></div> -->
                     </div>
                     <div class="form-group">
@@ -65,7 +65,7 @@
                   <thead>
                   <tr>
                       <th>Sl No</th>
-                      <th>Gender</th>
+                      <th>Degree</th>
                       <th>Status</th>
                       <th>Delete</th>
                       <!-- <th>ACTIONS</th> -->
@@ -73,14 +73,14 @@
                   </thead>
                 </form>
                 <tbody>
-                  <?php while($row=mysqli_fetch_array($showQuery)){
+                  <?php while($row=mysqli_fetch_array($queyDegree)){
                   ?>
                     <tr>
-                      <td><?php echo ++$slNo?> </td>
-                      <td><?php echo $row['name']?> </td>
+                      <td><?php echo ++$slNo?></td>
+                      <td><?php echo $row['name']?></td>
                       <td>Status</td>
                       <td>
-                        <a href="delete_gender.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
+                        <a href="delete_degree.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
                           <i class="fa fa-times d-flex justify-content-center pr-1 text-danger" aria-hidden="true"></i>
                         </a>
                       </td>
@@ -88,6 +88,7 @@
                   <?php
                   }
                   ?>
+                 
                 </tbody>
                 <!-- <tfoot>
                 <th>
@@ -108,4 +109,4 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
- <?php include_once "footer.php";?> 
+ <?php include_once "footer.php";?>

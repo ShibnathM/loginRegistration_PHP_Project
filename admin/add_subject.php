@@ -5,14 +5,14 @@
 
   $slNo=0;
 
-  $showGender="SELECT * FROM genders WHERE status='Y'";
-  $showQuery=$conn->query($showGender);
+  $selectSubject="SELECT * FROM subjects WHERE status='Y'";
+  $queySubject=$conn->query($selectSubject);
 
   if(isset($_POST['submit'])){
-    $gender=$_REQUEST['gender'];
+        $sub=$_REQUEST['sub'];
 
-    $query = "INSERT INTO genders SET  name ='".$gender."', status ='Y'";
-    $conn->query($query);
+        $insertSubject="INSERT INTO subjects SET name='".$sub."', status='Y'";
+        $subjectQuery=$conn->query($insertSubject);
   }
 ?>
   <!-- Content Wrapper. Contains page content -->
@@ -22,12 +22,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Manage Gender<span id="txt"> Control panel</span> </h1>
+            <h1>Manage Subject<span id="txt"> Control panel</span> </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-              <li class="breadcrumb-item">Manage Gender</li>
+              <li class="breadcrumb-item">Manage Subject</li>
             </ol>
           </div>
         </div>
@@ -50,8 +50,8 @@
               <form role="form" method="post">
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="gender">Add Gender</label>
-                      <input type="text" class="form-control" name="gender" id="gender" placeholder="Enter Gender">
+                      <label for="sub">Add Subject</label>
+                      <input type="text" class="form-control" name="sub" id="sub" placeholder="Enter Subject">
                       <!-- <div class="msg" id="product_alert"></div> -->
                     </div>
                     <div class="form-group">
@@ -65,7 +65,7 @@
                   <thead>
                   <tr>
                       <th>Sl No</th>
-                      <th>Gender</th>
+                      <th>Subject</th>
                       <th>Status</th>
                       <th>Delete</th>
                       <!-- <th>ACTIONS</th> -->
@@ -73,14 +73,14 @@
                   </thead>
                 </form>
                 <tbody>
-                  <?php while($row=mysqli_fetch_array($showQuery)){
+                  <?php while($row=mysqli_fetch_array($queySubject)){
                   ?>
                     <tr>
-                      <td><?php echo ++$slNo?> </td>
-                      <td><?php echo $row['name']?> </td>
+                      <td><?php echo ++$slNo?></td>
+                      <td><?php echo $row['name']?></td>
                       <td>Status</td>
                       <td>
-                        <a href="delete_gender.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
+                        <a href="delete_subject.php?id=<?php echo $row['id']?>" class="delete" title="delete" data-toggle="tooltip">
                           <i class="fa fa-times d-flex justify-content-center pr-1 text-danger" aria-hidden="true"></i>
                         </a>
                       </td>
@@ -88,6 +88,7 @@
                   <?php
                   }
                   ?>
+                 
                 </tbody>
                 <!-- <tfoot>
                 <th>

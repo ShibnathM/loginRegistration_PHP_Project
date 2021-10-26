@@ -11,7 +11,7 @@ $yearSet=$conn->query($sql);
       while($row=mysqli_fetch_array($yearSet))
       {
       ?>
-            <input class="form-check-input" type="radio" name="wh_year" id="wh_year" value="<?php echo $row['id']?>">
+            <input class="form-check-input" type="radio" name="wh_year" id="wh_year" value="<?php $row['id']?>">
             <label class="form-check-label" for="wh_year"><?php echo $row['name'] . "&nbsp &nbsp"?></label>
       <?php
       }
