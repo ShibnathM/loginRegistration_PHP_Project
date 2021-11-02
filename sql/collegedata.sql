@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 26, 2021 at 08:48 AM
+-- Generation Time: Nov 02, 2021 at 09:23 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -21,28 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `collegedata`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `degrees`
---
-
-DROP TABLE IF EXISTS `degrees`;
-CREATE TABLE IF NOT EXISTS `degrees` (
-  `id` int(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `status` enum('Y','N') COLLATE utf8_croatian_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
---
--- Dumping data for table `degrees`
---
-
-INSERT INTO `degrees` (`id`, `name`, `status`) VALUES
-(1, 'B.Sc.', 'Y'),
-(3, 'B.A', 'Y');
 
 -- --------------------------------------------------------
 
@@ -100,19 +78,21 @@ DROP TABLE IF EXISTS `streams`;
 CREATE TABLE IF NOT EXISTS `streams` (
   `id` int(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `parent_id` int(20) NOT NULL,
+  `parent_id` int(20) DEFAULT NULL,
   `status` enum('Y','N') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `streams`
 --
 
 INSERT INTO `streams` (`id`, `name`, `parent_id`, `status`) VALUES
-(1, 'Computer Applications', 1, 'Y'),
-(4, 'IT', 1, 'Y'),
-(3, 'History', 2, 'Y');
+(1, 'B.Sc', 0, 'Y'),
+(2, 'B.A', 0, 'Y'),
+(3, 'Computer Sci', 1, 'Y'),
+(4, 'Micro Boi', 1, 'Y'),
+(5, 'History', 2, 'Y');
 
 -- --------------------------------------------------------
 
@@ -135,16 +115,17 @@ CREATE TABLE IF NOT EXISTS `students` (
   `created_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `students`
 --
 
 INSERT INTO `students` (`id`, `name`, `email`, `phone`, `address`, `password`, `image`, `gender_id`, `year_id`, `status`, `created_at`, `updated_at`) VALUES
-(14, 'Shibnath', 'shibnath@mail.com ', 1234567890, 'Kolkata', '827ccb0eea8a706c4c34a16891f84e7b', '1635231523_user5.jpeg', 11, 2, 'Y', '2021-10-26 06:58:43', '2021-10-26 06:58:43'),
-(15, 'Kamal', 'kamal@mail.com', 3214569870, 'Bangalore', '827ccb0eea8a706c4c34a16891f84e7b', '1635231978_user4.jfif', 11, 3, 'Y', '2021-10-26 07:06:18', '2021-10-26 07:06:18'),
-(16, 'Sananya', 'sananya@mail.com', 4563217859, 'Mumbai', '827ccb0eea8a706c4c34a16891f84e7b', '1635232051_user1.jfif', 12, 1, 'Y', '2021-10-26 07:07:31', '2021-10-26 07:07:31');
+(31, 'Alpana', 'alpana@mail.com', 4563217859, 'Hyderabad', '827ccb0eea8a706c4c34a16891f84e7b', '1635400313_user1.jfif', 12, 1, 'Y', '2021-10-28 05:51:53', '2021-10-28 05:51:53'),
+(30, 'Kamal', 'kamal@mail.com', 9632587410, 'Bangalore', '827ccb0eea8a706c4c34a16891f84e7b', '1635400209_user2.jfif', 11, 3, 'Y', '2021-10-28 05:50:09', '2021-10-28 05:50:09'),
+(28, 'Shibnath', 'shibnath@mail.com ', 1234567890, 'Kolkata', '202cb962ac59075b964b07152d234b70', '1635400051_user4.jfif', 11, 2, 'Y', '2021-10-28 05:47:31', '2021-10-28 05:47:31'),
+(29, 'Sananya', 'sananya@mail.com', 3214569870, 'Mumbai', '827ccb0eea8a706c4c34a16891f84e7b', '1635400135_user3.jfif', 12, 2, 'Y', '2021-10-28 05:48:55', '2021-10-28 05:48:55');
 
 -- --------------------------------------------------------
 
@@ -158,32 +139,44 @@ CREATE TABLE IF NOT EXISTS `student_hobby` (
   `student_id` int(20) NOT NULL,
   `hobby_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `student_hobby`
 --
 
 INSERT INTO `student_hobby` (`id`, `student_id`, `hobby_id`) VALUES
-(1, 5, 1),
-(2, 5, 2),
-(3, 6, 1),
-(4, 6, 2),
-(5, 7, 2),
-(6, 8, 2),
-(7, 9, 2),
-(8, 10, 1),
-(9, 10, 2),
-(10, 11, 1),
-(11, 12, 1),
-(12, 13, 1),
-(13, 14, 1),
-(14, 14, 4),
-(15, 15, 1),
-(16, 15, 2),
-(17, 15, 5),
-(18, 16, 4),
-(19, 16, 5);
+(56, 31, 4),
+(55, 31, 2),
+(54, 30, 2),
+(51, 29, 1),
+(50, 28, 5),
+(49, 28, 4),
+(53, 30, 1),
+(52, 29, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_stream`
+--
+
+DROP TABLE IF EXISTS `student_stream`;
+CREATE TABLE IF NOT EXISTS `student_stream` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `streams_id` int(20) DEFAULT NULL,
+  `student_id` int(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+
+--
+-- Dumping data for table `student_stream`
+--
+
+INSERT INTO `student_stream` (`id`, `streams_id`, `student_id`) VALUES
+(11, 3, 28),
+(12, 5, 30),
+(13, 4, 31);
 
 -- --------------------------------------------------------
 
@@ -197,18 +190,17 @@ CREATE TABLE IF NOT EXISTS `student_subject` (
   `student_id` int(20) NOT NULL,
   `subject_id` int(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `student_subject`
 --
 
 INSERT INTO `student_subject` (`id`, `student_id`, `subject_id`) VALUES
-(1, 12, 6),
-(2, 13, 6),
-(3, 14, 4),
-(4, 15, 5),
-(5, 16, 7);
+(21, 31, 6),
+(20, 30, 4),
+(18, 28, 5),
+(19, 29, 7);
 
 -- --------------------------------------------------------
 

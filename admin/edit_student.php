@@ -1,15 +1,19 @@
 <?php  
 require_once "db_con.php";
-
-      $id=$_REQUEST['id'];
+include_once "navbar.php";
+//include_once "sidebar.php";
 
 //Show Data
-      $studentShow="SELECT * FROM students WHERE id='".$id."'";
-      $studentQuery=$conn->query($studentShow);
-      $row=mysqli_fetch_array($studentQuery);
+$id=$_REQUEST['id'];
+$studentData="SELECT S.name,S.email,S.phone,S.address,S.image,S.gender_id,S.year_id,SS.streams_id FROM students AS S JOIN student_stream AS SS ON SS.student_id=S.id WHERE S.id='$id'";
+// echo $studentData;
+// die();
+$studentQuery=$conn->query($studentData);
+$student=mysqli_fetch_array($studentQuery);
+$arr=array();
 
-// Update
-if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
+// Update Data
+if( isset($_POST['dataSubmit']) &&  $_POST['dataSubmit'] == 'dataSubmit' ) {
 
     $fileName=$_FILES["image"]["name"];
     $tempName=$_FILES["image"]["tmp_name"];
@@ -19,7 +23,7 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     move_uploaded_file($tempName,$fileDirectory);
 
     $name = $_POST['name'];
-    $email = $_REQUEST['email'];
+    $email = $_POST['email'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
     $gender = $_POST['gender'];
@@ -28,63 +32,73 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     $subject = $_POST['subject'];
     $year = $_POST['wh_year'];
 
-    $query = "UPDATE students SET   name ='".$name."', 
-                                    email = '".$email."', 
-                                    phone = '".$phone."',  
-                                    address = '".$address."',
-                                    image='".$uploadFileName."',
-                                    gender_id=".$gender.",
-                                    year_id='".$year."',
-                                    password ='".md5($password)."' 
-                                    WHERE id=$id";
+    $query = "UPDATE students SET  name ='".$name."', 
+                                        email = '".$email."', 
+                                        phone = '".$phone."',
+                                        address = '".$address."',
+                                        image='".$uploadFileName."',
+                                        gender_id=".$gender.",
+                                        year_id='".$year."' 
+                                        WHERE id='".$id."'";
 
-    //echo $query; die();
+    // echo $query; die();
     $conn->query($query);
     $id = $conn->insert_id;
-//update hobbies   
+//Update hobbies   
     if(count($hobbies) > 0 ) {
         foreach ($hobbies as $key => $hobby) {
             
             $sql = "UPDATE student_hobby SET student_id =".$id." , 
-                                                  hobby_id =".$hobby."";
+                                                  hobby_id =".$hobby."
+                                                  WHERE student_id='".$id."'";
 
            $conn->query($sql);
         }
     }
 
-//update subject
+//Update subject
             $sql="UPDATE student_subject SET student_id='".$id."',
-                                                  subject_id='".$subject."'";
+                                                  subject_id='".$subject."'
+                                                  WHERE student_id='".$id."'";
 
             $conn->query($sql);
-
+    
 }
 ?>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Edit Student<span id="txt"> Control panel</span> </h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="students.php">Manage Students</a></li>
+              <li class="breadcrumb-item">Edit Student</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login_registration</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-        legend {
-            width: auto;
-            color: green;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container-fluid">
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+          <!-- left column -->
+          <div class="col">
+            <!-- general form elements -->
+            <div class="container-fluid">
         <div class="row">
             <div class="col mt-3">
-                <div class="card">
+                <div class="card card-primary">
                     <!-- Card Header Start -->
                     <div class="card-header">
-                        <hr>
+                        <h3 class="card-title">EDIT</h3>
                     </div>
                     <!-- Card Header End -->
                     <!-- Card Body Start -->
@@ -94,58 +108,172 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                                 <!-- Fieldset Start -->
                                 <fieldset class="form-group border p-2">
                                     <legend>
-                                        <strong>EDIT</strong>
+                                        <strong>Edit Register</strong>
                                     </legend>
                                     <!-- Registration Form Start -->
-                                    <form action="login_registration.php" method="post" enctype="multipart/form-data">
+                                    <form action="" method="post" enctype="multipart/form-data">
                                         <!-- Name Input Start -->
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<?php echo $row['name']?>">
+                                            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="<?php echo $student['name']?>">
                                         </div>
                                         <!-- Name Input End -->
                                         <!-- Email Input Start -->
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email" value="<?php echo $row['email']?>">
+                                            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email" value="<?php echo $student['email']?>">
                                         </div>
                                         <!-- Email Input End -->
                                         <!-- Phone Input Start -->
                                         <div class="form-group">
                                             <label for="phone">Phone No</label>
-                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phone" value="<?php echo $row['phone']?>">
+                                            <input type="text" class="form-control" id="phone" placeholder="Enter phone no" name="phone" value="<?php echo $student['phone']?>">
                                         </div>
                                         <!-- Phone Input End -->
                                         <!-- Address Input Start -->
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <textarea class="form-control" id="address" name="address" rows="3"><?php echo $row['address']?></textarea>
+                                            <textarea class="form-control" id="address" name="address" rows="3"><?php echo $student['address']?></textarea>
                                         </div>
                                         <!-- Address Input End -->
                                         <!-- Gender Input Start -->
-                                        <?php  include "gender_show.php";?>
+                                        <?php 
+                                        $gender="SELECT * FROM genders WHERE status = 'Y'";
+                                        $query=$conn->query($gender);
+                                        ?>
+                                        <div class="form-group">
+                                            <label for="gender">Gender</label>
+                                                <select id="gender" class="form-control" name="gender">
+                                                    <option selected disabled value="">Select Gender</option>
+                                                        <?php 
+                                                            while($row=mysqli_fetch_array($query)){
+                                                        ?>
+                                                            <option value="<?php echo $row["id"]?>" <?php if($student['gender_id']==$row['id']) {?>selected="selected"<?php }?>>
+                                                                <?php echo $row["name"]?>
+                                                            </option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                </select>
+                                        </div>
                                         <!-- Gender Input End -->
                                         <!-- Which Year Input Start -->
-                                        <?php include_once "whichYear_show.php";?>
+                                        <?php
+                                            
+                                            $sql="SELECT * FROM years WHERE status='Y'";
+                                            $yearSet=$conn->query($sql);
+                                            ?>
+                                            <div>
+                                                <label for="whichYear">Which Year</label>
+                                                <div class="form-check form-check-inline ml-3" id="whichYear">
+                                                <?php 
+                                                while($row=mysqli_fetch_array($yearSet))
+                                                {
+                                                ?>
+                                                        <input class="form-check-input" type="radio" name="wh_year" id="wh_year" value="<?php echo $row['id']?>" <?php if($student['year_id']==$row['id']) {?>checked="checked"<?php }?>>
+                                                        <label class="form-check-label" for="wh_year">
+                                                            <?php echo $row['name'] . "&nbsp &nbsp"?>
+                                                        </label>
+                                                <?php
+                                                }
+                                                ?>
+                                                </div>
+                                            </div>
                                         <!-- Which Year Input end -->
                                         <!-- Subject Input Start -->
-                                        <?php include_once "subject_show.php";?>
+                                        <?php
+                                           
+                                            ?>
+                                            <div class="form-group">
+                                                <label for="subject">Subject</label>
+                                                <select multiple class="form-control" id="subject" name="subject[]">
+                                                    <?php
+                                                        $sql2= "SELECT * FROM student_subject WHERE student_id=".$student['id'];
+                                                        $query2=$conn->query($sql2);
+                                                        // $subArr=array();
+                                                        // $subArr[]=$query2['subject_id'];
+                                                         
+                                                        $sql="SELECT * FROM subjects WHERE status='Y'";
+                                                        $subjectSet=$conn->query($sql);
+                                                        while($row=mysqli_fetch_array($subjectSet)){
+                                                    ?>
+                                                            <option value="<?php echo $row['id']?>" <?php if($row['id']==$query2['subject_id']) {?> selected="selected"<?php }?>><?php echo $row['name']?></option>
+                                                    <?php
+                                                    };
+                                                    ?>
+                                                </select>
+                                            </div>
                                         <!-- Subject Input End -->
                                         <!-- Stream/Honours Input Start -->
-                                        <?php include_once "stream_show.php"?>
+                                        
+                                        <div class="form-group">
+                                            <label for="StreamHonours">Stream/Honours</label>
+                                                <select name="StreamHonours" id="StreamHonours" class="form-control">
+                                                    <optgroup>
+                                                            <option disabled selected value="">Select Stream / honours</option>
+                                                    </optgroup>
+                                                        <?php
+                                                            $streamSql="SELECT * FROM  streams WHERE parent_id=0";
+                                                            $streamSet=$conn->query($streamSql);
+                                                            while($row=mysqli_fetch_array($streamSet)){
+                                                        ?>
+                                                    <optgroup label="<?php echo $row['name']?>">
+                                                    <?php
+                                                        $Sql="SELECT * FROM  streams WHERE parent_id=".$row['id'];
+                                                            $Set=$conn->query($Sql);
+                                                            while($row2=mysqli_fetch_array($Set)){
+                                                    ?>
+                                                            <option value="<?php echo $row2['id']?>" <?php if($student['streams_id']==$row2['id']) {?>selected="selected"<?php }?>><?php echo $row2['name']?></option>
+                                                    <?php }?>
+                                                    </optgroup>
+                                                        <?php
+                                                            }
+                                                        ?>
+                                                </select>
+                                        </div>
                                         <!-- Stream/Honours Input End -->
                                         <!-- Hobbies Input Start -->
-                                        <?php include_once "hobby_show.php";?>
+                                        <?php
+                                            $sql = "SELECT * from hobbies WHERE status = 'Y'";
+                                            $hobbySet = $conn->query($sql);
+                                            ?>
+                                            <div class="form-group">
+                                                <label for="hobbyHading" class="mt-2">Hobbies</label>
+                                                    <?php
+                                                        $sql3 = "SELECT hobby_id from student_hobby where student_id=".$id;
+                                                        
+                                                        $sqlQuery=$conn->query($sql3); 
+                                                        $arr =array();
+                                                        while($row3=mysqli_fetch_array($sqlQuery) ) {
+                                                            $arr[] = $row3['hobby_id'];
+                                                        }
+                                                        while( $row = mysqli_fetch_array( $hobbySet, MYSQLI_ASSOC)) {
+                                                    ?>
+                                                        <div class="form-check" id="hobbyHading">
+                                                            <label class="form-check-label">
+                                                            <input type="checkbox" class="form-check-input" name="hobbies[]" <?php if(in_array($row['id'], $arr) == true) { ?>  checked="checked" <?php } ?> value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?>
+                                                        </div>
+                                                </label>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                            </div>
                                         <!-- Hobbies Input End -->
                                         <!-- Image Upload Start -->
-                                        <div class="custom-file">
+                                         <img src="../user/upload/<?php echo $student['image']?>" alt="student_img" style="width: 6rem; height: 6rem;">
+                                        <div class="custom-file mt-2">
                                             <input type="file" class="custom-file-input" id="customFile" name="image">
                                             <label class="custom-file-label" for="customFile">Upload Image</label>
                                         </div>
+                                        <!-- Submit Button Start -->
+                                        <div class="form-group mt-3">
+                                            <input type="submit" name="dataSubmit"class="btn btn-primary px-4" value="Update Data">
+                                        </div>
+                                        <!-- Submit Button End -->
                                         <!-- Image Upload End -->
                                         <!-- Password Input Start -->
                                         <div class=" form-group">
-                                            <label for="password">Password</label>
+                                            <label for="password">Reset Password</label>
                                             <input type="password" class="form-control" id="password" placeholder="Password" name="password">
                                         </div>
                                         <!-- Password Input End -->
@@ -155,11 +283,11 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                                             <input type="password" class="form-control" id="conformPassword" placeholder="Password" name="conformPassword">
                                         </div>
                                         <!-- Conform Password Input End -->
-                                        <!-- Submit Button Start -->
+                                        <!-- password reset Button Start -->
                                         <div class="form-group">
-                                            <input type="submit" name="submit"class="btn btn-primary" value="Submit">
+                                            <input type="submit" name="passSubmit"class="btn btn-primary" value="Change Password">
                                         </div>
-                                        <!-- Submit Button End -->
+                                        <!-- password reset Button End -->
                                     </form>
                                     <!-- Registration Form End -->
                                 </fieldset>
@@ -170,24 +298,20 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                     <!-- Card Body End -->
                     <!-- Card Footer Start -->
                     <div class="card-footer text-muted text-center">
-                        <p>Student Data Edit</p>
+                        <p>Student Edit Register</p>
                     </div>
                     <!-- Card Footer End -->
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
-        // Add the following code if you want the name of the file appear on select
-        $(".custom-file-input").on("change", function() {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-        });
-    </script>
-</body>
-
-</html>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ <?php include_once "footer.php";?> 

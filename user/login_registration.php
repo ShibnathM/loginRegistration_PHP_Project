@@ -2,7 +2,7 @@
 require_once "db_con.php";
 
 // Insert
-if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
+if( isset($_POST['submit']) && $_POST['submit'] == 'Submit' ) {
 
     $fileName=$_FILES["image"]["name"];
     $tempName=$_FILES["image"]["tmp_name"];
@@ -20,6 +20,7 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     $hobbies = $_POST['hobbies'];
     $subject = $_POST['subject'];
     $year = $_POST['wh_year'];
+    $stream = $_POST['StreamHonours'];
 
     $query = "INSERT INTO students SET  name ='".$name."', 
                                         email = '".$email."', 
@@ -33,7 +34,7 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
     //echo $query; die();
     $conn->query($query);
     $id = $conn->insert_id;
-//insert hobbies   
+//Insert hobbies   
     if(count($hobbies) > 0 ) {
         foreach ($hobbies as $key => $hobby) {
             
@@ -44,12 +45,16 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
         }
     }
 
-//insert subject
+//Insert subject
             $sql="INSERT INTO student_subject SET student_id='".$id."',
                                                   subject_id='".$subject."'";
 
             $conn->query($sql);
-    
+
+//Insert Stream/Honours
+            $streamSql="INSERT INTO student_stream SET streams_id='".$stream."',student_id='".$id."'";
+
+            $conn->query($streamSql);
 }
 ?>
 
@@ -145,19 +150,110 @@ if( isset($_POST['submit']) &&  $_POST['submit'] == 'Submit' ) {
                                         </div>
                                         <!-- Address Input End -->
                                         <!-- Gender Input Start -->
-                                        <?php  include "gender_show.php";?>
+                                        <?php 
+                                        $gender="SELECT * FROM genders WHERE status = 'Y'";
+                                        $query=$conn->query($gender);
+                                        ?>
+
+                                        <div class="form-group">
+                                            <label for="gender">Gender</label>
+                                                <select id="gender" class="form-control" name="gender">
+                                                    <option selected disabled value="">Select Gender</option>
+                                                        <?php 
+                                                            while($row=mysqli_fetch_array($query)){
+                                                        ?>
+                                                            <option value="<?php echo $row["id"]?>"><?php echo $row["name"]?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                </select>
+                                        </div>
                                         <!-- Gender Input End -->
                                         <!-- Which Year Input Start -->
-                                        <?php include_once "whichYear_show.php";?>
+                                        <?php
+                                            $sql="SELECT * FROM years WHERE status='Y'";
+                                            $yearSet=$conn->query($sql);
+                                            ?>
+                                            <div>
+                                                <label for="whichYear">Which Year</label>
+                                                <div class="form-check form-check-inline ml-3" id="whichYear">
+                                                <?php 
+                                                while($row=mysqli_fetch_array($yearSet))
+                                                {
+                                                ?>
+                                                        <input class="form-check-input" type="radio" name="wh_year" id="wh_year" value="<?php echo $row['id']?>">
+                                                        <label class="form-check-label" for="wh_year"><?php echo $row['name'] . "&nbsp &nbsp"?></label>
+                                                <?php
+                                                }
+                                                ?>
+                                                </div>
+                                            </div>
                                         <!-- Which Year Input end -->
                                         <!-- Subject Input Start -->
-                                        <?php include_once "subject_show.php";?>
+                                        <?php
+                                           
+                                            ?>
+                                            <div class="form-group">
+                                                <label for="subject">Subject</label>
+                                                <select multiple class="form-control" id="subject" name="subject">
+                                                    <?php
+                                                        $sql="SELECT * FROM  subjects WHERE status='Y'";
+                                                        $subjectSet=$conn->query($sql);
+                                                        while($row=mysqli_fetch_array($subjectSet)){
+                                                    ?>
+                                                            <option value="<?php echo $row['id']?>"><?php echo $row['name']?></option>
+                                                    <?php
+                                                    };
+                                                    ?>
+                                                </select>
+                                            </div>
                                         <!-- Subject Input End -->
                                         <!-- Stream/Honours Input Start -->
-                                        <?php include_once "stream_show.php"?>
+                                        
+                                        <div class="form-group">
+                                            <label for="StreamHonours">Stream/Honours</label>
+                                            <select name="StreamHonours" id="StreamHonours" class="form-control">
+                                                <optgroup>
+                                                    <option disabled selected value="">Select Stream / honours</option>
+                                                </optgroup>
+                                                    <?php
+                                                        $streamSql="SELECT * FROM  streams WHERE parent_id=0";
+                                                        $streamSet=$conn->query($streamSql);
+                                                        while($row=mysqli_fetch_array($streamSet)){
+                                                    ?>
+                                                <optgroup label="<?php echo $row['name']?>">
+                                                    <?php
+                                                        $Sql="SELECT * FROM  streams WHERE parent_id=".$row['id'];
+                                                            $Set=$conn->query($Sql);
+                                                            while($row2=mysqli_fetch_array($Set)){
+                                                    ?>
+                                                    <option value="volvo"><?php echo $row2['name']?></option>
+                                                    <?php }?>
+                                                </optgroup>
+                                                <?php }?>
+                                            </select>
+                                        </div>
                                         <!-- Stream/Honours Input End -->
                                         <!-- Hobbies Input Start -->
-                                        <?php include_once "hobby_show.php";?>
+                                        <?php
+                                            $sql = "SELECT * from hobbies WHERE status = 'Y'";
+                                            $hobbySet = $conn->query($sql);
+                                            ?>
+                                            <div class="form-group">
+                                                <label for="hobbyHading" class="mt-2">Hobbies</label>
+
+                                                    <?php 
+                                                        while( $row = mysqli_fetch_array( $hobbySet, MYSQLI_ASSOC)) {
+                                                    ?>
+                                                        <div class="form-check" id="hobbyHading">
+                                                            <label class="form-check-label">
+                                                            <input type="checkbox" class="form-check-input" name="hobbies[]" value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?>
+                                                        </div>
+                                                </label>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                            </div>
                                         <!-- Hobbies Input End -->
                                         <!-- Image Upload Start -->
                                         <div class="custom-file">

@@ -5,10 +5,13 @@
 
       $slNo=0;
 
-      $studentData="SELECT * FROM students";
+      $studentData="SELECT S.id, S.name,S.phone, S.email,G.name AS gender_name,S.address,S.image,S.gender_id,S.year_id FROM students AS S JOIN genders AS G ON G.id=S.gender_id";
       $studentQuery=$conn->query($studentData);
-?>
 
+      //Show Year
+      $yearSql="SELECT S.id,Y.name FROM students AS S JOIN years AS Y ON S.year_id=Y.id";
+      $yearQuery=$conn->query($yearSql);
+?>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <div class="content-header">
@@ -71,6 +74,11 @@
                   </thead>
                   <tbody>
                   <?php while($row=mysqli_fetch_array($studentQuery)){
+
+                    //Show Stream/Honours
+                     $streamSql="SELECT * FROM streams AS Str JOIN degrees AS Deg ON Str.parent_id=Deg.id";
+
+                     $streamQuery=$conn->query($streamSql);
                   ?>
                     <tr>
                       <td><?php echo ++$slNo?> </td>
@@ -80,11 +88,47 @@
                       <td><?php echo $row['email']?></td>
                       <td><?php echo $row['phone']?></td>
                       <td><?php echo $row['address']?></td>
-                      <td><?php echo $row['gender_id']?></td>
-                      <td><?php echo $row['year_id']?></td>
-                      <td><?php echo 'subject'?></td>
-                      <td><?php echo 'Stream/Honours'?></td>
-                      <td><?php echo 'Hobbies'?></td>
+                      <td>
+                        <?php echo $row['gender_name']?>
+                      </td>
+                      <td>
+                      <?php
+                          $yearSql="SELECT * FROM years WHERE id=".$row['year_id'];
+                          
+                          $yearQuery=$conn->query($yearSql);
+                          while($rowYear=mysqli_fetch_array($yearQuery)){
+                             echo $rowYear['name'];
+                          }
+                      ?>
+                      </td>
+                      <td>
+                       <?php $subSql="SELECT S.id,S.name,SS.id,SS.student_id,SS.subject_id FROM subjects AS S JOIN student_subject AS SS ON S.id=SS.subject_id WHERE SS.Student_id=".$row['id'];
+                        $subQuery=$conn->query($subSql);
+                        while($rowSub=mysqli_fetch_array($subQuery)){
+                             echo $rowSub['name'];
+                        }
+                        ?>
+                      </td>
+                      <td>
+                       <?php 
+                       //$degreeSql="SELECT name FROM streams WHERE id=parent_id";
+                       $steamSql="SELECT * FROM student_stream AS SS JOIN streams AS S ON SS.streams_id=S.id WHERE SS.student_id=".$row['id'];
+                       $steamQuery=$conn->query($steamSql);
+                       while($steam=mysqli_fetch_array($steamQuery)){
+                             echo $steam['name'];
+                        }
+                       ?>
+                      </td>
+                      <td>
+                        <ul>
+                           <?php
+                           $hobbySql = "SELECT H.name FROM student_hobby AS SB JOIN hobbies AS H ON SB.hobby_id = H.id  WHERE SB.student_id=".$row['id'];
+                            $hobbyQuery=$conn->query($hobbySql);
+                            while($row2=mysqli_fetch_array($hobbyQuery)){?>
+                            <li><?php echo $row2['name']; ?></li> 
+                          <?php } ?>
+                        </ul>
+                      </td>
                       <td>
                         <a href="edit_student.php?id=<?php echo $row['id']?>" class="edit" title="Edit" data-toggle="tooltip"><i
                             class="far fa-edit"></i></a>
